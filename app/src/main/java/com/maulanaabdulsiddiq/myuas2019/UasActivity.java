@@ -1,13 +1,23 @@
 package com.maulanaabdulsiddiq.myuas2019;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.maulanaabdulsiddiq.myuas2019.model.DataItem;
+import com.maulanaabdulsiddiq.myuas2019.retrofit.RetrofitConfig;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class UasActivity extends AppCompatActivity {
 
@@ -30,17 +40,25 @@ public class UasActivity extends AppCompatActivity {
         mKelas = findViewById(R.id.et_kelas);
         mJam = findViewById(R.id.et_jam);
 
-        btn_simpan = findViewById(R.id.btn_uas);
-        btn_tampil = findViewById(R.id.btn_haji);
+        btn_simpan = findViewById(R.id.simpan_uas);
+        btn_tampil = findViewById(R.id.tampil_uas);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, kelas);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mKelas.setAdapter(adapter);
 
         btn_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 simpanData();
+            }
+        });
+
+        btn_tampil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
             }
         });
     }
@@ -60,7 +78,32 @@ public class UasActivity extends AppCompatActivity {
         } else if (jam.isEmpty()){
             mJam.setError("Jam masih kosong");
         } else {
-            //
+
+            final ProgressDialog progress = new ProgressDialog(UasActivity.this);
+            progress.setMessage("saving...");
+            progress.show();
+
+            Call<DataItem> request = RetrofitConfig.getApiService().tambahData(nik,nama,kelas,jam);
+            request.enqueue(new Callback<DataItem>() {
+                @Override
+                public void onResponse(Call<DataItem> call, Response<DataItem> response) {
+                    progress.dismiss();
+                    if (response.isSuccessful()){
+                        Toast.makeText(UasActivity.this, "Berhasil disimpan", Toast.LENGTH_SHORT).show();
+                        mNik.setText("");
+                        mNama.setText("");
+                        mJam.setText("");
+                    } else {
+                        Toast.makeText(UasActivity.this, "Gagal disimpan", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DataItem> call, Throwable t) {
+                    Toast.makeText(UasActivity.this, "Periksa koneksi internet", Toast.LENGTH_SHORT).show();
+                    progress.dismiss();
+                }
+            });
         }
     }
 }
