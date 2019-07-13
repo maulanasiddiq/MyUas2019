@@ -2,7 +2,7 @@ package com.maulanaabdulsiddiq.myuas2019.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DataItem{
+public class DataUas {
 
 	@SerializedName("nik")
 	private String nik;
@@ -84,7 +84,7 @@ public class DataItem{
 	@Override
  	public String toString(){
 		return 
-			"DataItem{" + 
+			"DataUas{" +
 			"nik = '" + nik + '\'' + 
 			",nama = '" + nama + '\'' + 
 			",updated_at = '" + updatedAt + '\'' + 

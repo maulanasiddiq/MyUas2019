@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TampilUasActivity"></activity>
+        <activity android:name=".TampilHajiActivity"></activity>
+        <activity android:name=".TampilUasActivity" />
         <activity android:name=".HajiActivity" />
         <activity android:name=".UasActivity" />
         <activity android:name=".MainActivity">

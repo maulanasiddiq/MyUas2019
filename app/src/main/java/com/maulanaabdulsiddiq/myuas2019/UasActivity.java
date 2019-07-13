@@ -1,6 +1,7 @@
 package com.maulanaabdulsiddiq.myuas2019;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -11,13 +12,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.maulanaabdulsiddiq.myuas2019.model.DataItem;
+import com.maulanaabdulsiddiq.myuas2019.model.DataUas;
 import com.maulanaabdulsiddiq.myuas2019.retrofit.RetrofitConfig;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class UasActivity extends AppCompatActivity {
 
@@ -58,7 +58,8 @@ public class UasActivity extends AppCompatActivity {
         btn_tampil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                Intent intent = new Intent(UasActivity.this, TampilUasActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -83,10 +84,10 @@ public class UasActivity extends AppCompatActivity {
             progress.setMessage("saving...");
             progress.show();
 
-            Call<DataItem> request = RetrofitConfig.getApiService().tambahData(nik,nama,kelas,jam);
-            request.enqueue(new Callback<DataItem>() {
+            Call<DataUas> request = RetrofitConfig.getApiService().tambahData(nik,nama,kelas,jam);
+            request.enqueue(new Callback<DataUas>() {
                 @Override
-                public void onResponse(Call<DataItem> call, Response<DataItem> response) {
+                public void onResponse(Call<DataUas> call, Response<DataUas> response) {
                     progress.dismiss();
                     if (response.isSuccessful()){
                         Toast.makeText(UasActivity.this, "Berhasil disimpan", Toast.LENGTH_SHORT).show();
@@ -99,7 +100,7 @@ public class UasActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<DataItem> call, Throwable t) {
+                public void onFailure(Call<DataUas> call, Throwable t) {
                     Toast.makeText(UasActivity.this, "Periksa koneksi internet", Toast.LENGTH_SHORT).show();
                     progress.dismiss();
                 }
